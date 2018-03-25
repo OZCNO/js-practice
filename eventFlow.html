@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>js事件流-冒泡事件</title>
+	<style type="text/css" media="screen">
+		#red{
+			width:400px;
+			height: 400px;
+			border-radius: 50%;
+			background-color: red;
+			position: relative;
+			margin:0 auto;
+		}
+		#blue{
+			width:300px;
+			height: 300px;
+			border-radius: 50%;
+			background-color: blue;
+			position: absolute;
+			top:50px;
+			left:50px;
+		}
+		#green{
+			width:200px;
+			height: 200px;
+			border-radius: 50%;
+			background-color: green;
+			position: absolute;
+			top:50px;
+			right: 50px;
+			text-align: center;
+			box-sizing: border-box;
+			padding:80px 0px;
+		}
+	</style>
+	<script type="text/javascript" charset="utf-8">
+	//节点应该先加载完毕才可以添加执行onclick事件，所以要添加window.onload
+	window.onload=function(){
+		//冒泡事件
+		var greenDiv=document.getElementById("green");
+		greenDiv.onclick=function(){
+			alert("I am green div");
+		}
+		var blueDiv=document.getElementById("blue");
+		blueDiv.onclick=function(){
+			alert("I am blue div");
+		}
+		var redDiv=document.getElementById("red");
+		redDiv.onclick=function(){
+			alert("I am red div");
+		}
+	}
+	</script>
+</head>
+<body>
+	<div id="red">
+		<div id="blue">
+			<div id="green">
+				click me!
+			</div>
+			
+		</div>
+		
+	</div>
+</body>
+</html>

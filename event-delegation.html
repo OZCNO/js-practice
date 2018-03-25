@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>事件流应用-事件代理</title>
+	<script>
+	window.onload=function(){
+	    var colorList=document.getElementById("list");
+	    colorList.addEventListener('click',showColor,false);
+	    function showColor(e){
+	        e=e||window.event;
+	        var targetElement=e.target||e.srcElement;
+	        if(targetElement.nodeName.toLowerCase()==="li"){
+	        alert(targetElement.innerHTML);
+	        }
+	    }
+	    //事件代理的一个有趣应用:点击一个列表时，输出对应的索引
+	    // var ul=document.querySelector('ul');
+	    // var lis=ul.querySelectorAll('ul li');
+	    // ul.addEventListener('click', function (e) {
+	    //     var target= e.target;
+	    //     if(target.nodeName.toUpperCase()==='LI'){
+	    //         alert([].indexOf.call(lis,target));
+	    //     }
+	    // },false)
+	}
+	</script>
+</head>
+<body>
+	<ul id="list">
+		<li>red</li>
+		<li>green</li>
+		<li>blue</li>
+		<li>white</li>
+		<li>black</li>
+		<li>pink</li>
+	</ul>
+</body>
+</html>

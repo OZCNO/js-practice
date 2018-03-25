@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>js事件流-例子练习</title>
+	<style type="text/css" media="screen">
+	.circle{
+		border-radius: 50%;
+		text-align: center;
+		background-color: green;
+		border: 1px solid #000;
+		position: absolute;
+		top:50%;
+		left:50%;
+		cursor: pointer;
+	}
+	/*如此外层也变色了*/
+/*	.circle:hover{
+		background-color: grey;
+	}*/
+	/*因为这里的子元素是一个嵌套一个的，所以每一个都是奇数，如果是并列的，就会生效*/
+/*	div:nth-child(odd){
+		background-color: green;
+	}
+	div:nth-child(even){
+		background-color: white;
+	}*/
+	#circle{
+		position: relative;
+		top:0;
+		left:0;
+		margin:10px auto;
+	}
+		
+	</style>
+	<script>
+	window.onload=function(){
+		//先创建大圆
+		var layout=document.createElement("div");
+
+		//注意添加class和id的区别哦
+		layout.className="circle";
+		layout.id="circle";
+
+
+		var n=20;//n个圆
+		var interval=30;//圆宽高依次小30px,间距则为15px;且最小的圆直径设为30px，则最大的圆的直径为n个interval
+		
+		layout.style.width=n*interval+"px";
+		layout.style.height=n*interval+"px";
+		layout.innerHTML=n;
+
+		//添加进body中
+		document.getElementsByTagName("body")[0].appendChild(layout);
+
+		//接着创建小圆
+		for(var i=1;i<n;i++){
+			//important,如果这里没有再次创建div，div就还是指向原来那个元素，i=2时，parent=child，且只是在改第19个圆的样式，而两个对象是同一个，appendChild发生错误
+			
+			//千万要在循环的时候重新给div指向哦
+			var div=document.createElement("div");
+			div.className="circle";
+
+			//画圆
+			layout=loadDiv(layout,div,n-i);	
+
+		}
+		// var circles=document.getElementsByClassName("circle");
+		//传统的方法，输出一个数
+		// for(var i=0;i<n;i++){
+		// 	circles[i].addEventListener("click",function(e){
+		// 		e.currentTarget.childNodes.forEach(function(v) {
+		// 		    if(v instanceof Text) {
+		// 		        console.log(v.data);
+		// 		    }
+		// 		});
+		// 		e.stopPropagation();
+		// 	},false);
+		// }
+		
+		// for(var i=0;i<n;i++){
+			// 事件冒泡
+			// circles[i].onclick=function(e){
+			// 	e.currentTarget.childNodes.forEach(function(v) {
+			// 	    if(v instanceof Text) {
+			// 	    	//文字节点为Text()实例，用data或者wholeText可以取到String类型的文本
+			// 	    	//https://segmentfault.com/q/1010000009913772/a-1020000009914008
+			// 	        console.log(v.data);
+			// 	        // console.log(v.wholeText);
+			// 	    }
+			// 	});
+			// }
+			// 事件流全过程
+			// circles[i].addEventListener("click",function(e){
+			// 	e.currentTarget.childNodes.forEach(function(v) {
+			// 	    if(v instanceof Text) {
+			// 	        console.log(v.data+" 捕获阶段");
+			// 	    }
+			// 	});
+			// 	//true表示事件句柄在捕获阶段执行； 
+			// 	//false- 默认。事件句柄在冒泡阶段执行
+			// },true);			
+			// circles[i].addEventListener("click",function(e){
+			// 	e.currentTarget.childNodes.forEach(function(v) {
+			// 	    if(v instanceof Text) {
+			// 	        console.log(v.data+" 冒泡阶段");
+			// 	    }
+			// 	});
+			// },false);
+		// }
+		// 事件代理，输出一个数
+		// var circle=document.getElementById("circle");
+		// circle.addEventListener("click",function(e){
+	 //        e=e||window.event;
+	 //        var targetElement=e.target||e.srcElement;
+		// 		targetElement.childNodes.forEach(function(v) {
+		// 		    if(v instanceof Text) {
+		// 		        console.log(v.data);
+		// 		    }
+		// 		});
+		// },false)
+		//事件代理+事件冒泡
+		var circle=document.getElementById("circle");
+		circle.addEventListener("click",function(e){
+	        e=e||window.event;
+	        var targetElement=e.target||e.srcElement;
+	        while(targetElement.nodeName!="BODY"){
+				targetElement.childNodes.forEach(function(v) {
+				    if(v instanceof Text) {
+				        console.log(v.data);
+				    }
+				});
+				targetElement=targetElement.parentNode;
+			}
+		},false)
+	}
+	function loadDiv(parent,child,v){
+		child.style.width=30*v+"px";
+		child.style.height=30*v+"px";
+		child.style.marginLeft=-15*v+"px";
+		child.style.marginTop=-15*v+"px";
+		child.innerHTML=v;
+		parent.appendChild(child);
+		return child;
+	}
+	</script>
+</head>
+<body>
+</body>
+</html>
